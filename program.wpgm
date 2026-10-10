@@ -1,0 +1,38 @@
+import example.*
+program pacmanGame {
+	
+	// límites del juego
+	game.width(14)
+	game.height(8)
+	
+	// fondo
+	game.boardGround("pacmanBackground.jpg")
+
+    game.title("Pacman!")
+	
+	// personaje principal
+	game.addVisualCharacter(pacman)
+
+	// rivales
+  const rivales = [new Rival(numero = 1), new Rival(numero = 2)]
+	
+	rivales.forEach { rival => 
+		game.addVisual(rival)
+		game.onCollideDo(rival, { personaje =>
+			personaje.perderVida()
+            if(personaje.juegoTerminado()) {
+                game.say(personaje,"me morí juego terminado")
+                game.stop()
+            }
+		})
+		game.onTick(1.randomUpTo(5) * 1000, "movimiento", {
+			rival.acercarseA(pacman)
+		})
+	}
+	
+    juego.configurarTeclas()
+    juego.agregarVisualesIniciales()
+	// que arranque el juego!
+	game.start()
+	
+}
